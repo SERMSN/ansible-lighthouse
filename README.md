@@ -33,4 +33,4 @@ This project is licensed under MIT License. See [LICENSE](/LICENSE) for more det
 
 [lighthouse](https://lighthouse-book.sigmaprime.io/intro.html) by `Google, Inc.`
 
-Role by `InfernoFeniks`.
+Role by `WRCS`.
