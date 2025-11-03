@@ -1,0 +1,30 @@
+---
+# tasks file for roles/lighthause
+
+- name: SYSTEM | Update DNF repo for CentOS 8
+  ansible.builtin.include_tasks: dnf_prepare.yml
+  when: ansible_pkg_mgr == "dnf"
+
+- name: SYSTEM | Install git
+  include_tasks: install_git.yml
+
+- name: LIGHTHOUSE | Get from git
+  ansible.builtin.git:
+    repo: "{{ lighthouse.source }}"
+    version: master
+    dest: "{{ lighthouse.dir }}"
+  become: true
+
+- name: LIGHTHOUSE | Remove default nginx config
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  become: true
+
+- name: LIGHTHOUSE | Create web config
+  become: true
+  ansible.builtin.template:
+    src: lighthouse.j2
+    dest: /etc/nginx/conf.d/lighthouse.conf
+    mode: "0644"
+  notify: LIGHTHOUSE - NGINX | Restarted service

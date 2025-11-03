@@ -1,0 +1,8 @@
+---
+# handlers file for roles/lighthause
+- name: LIGHTHOUSE - NGINX | Restarted service
+  become: true
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+  when: ansible_facts.virtualization_type != "docker" and ansible_facts.virtualization_type != "podman"

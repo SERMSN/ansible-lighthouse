@@ -1,0 +1,23 @@
+- name: Verify
+  hosts: all
+  gather_facts: false
+  vars:
+    lighthouse:
+      dir: /var/lib/lighthouse
+  
+  tasks:
+    - name: Get Nginx version
+      ansible.builtin.command: "nginx -v"
+      changed_when: false
+      register: nginx_version
+    - name: Assert Nginx instalation
+      ansible.builtin.assert:
+        that: "'{{ nginx_version.rc }}' == '0'"
+
+    - name: Check if the file exists
+      stat:
+        path: "{{ lighthouse.dir }}/index.html"
+      register: file_stat
+    - name: Assert Lighthouse instalation
+      ansible.builtin.assert:
+        that: "'{{ file_stat.stat.exists }}' == 'True'"
